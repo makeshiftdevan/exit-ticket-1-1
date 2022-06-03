@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Exit Ticket</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://drive.google.com/uc?export=view&id=1fiTChoLemD_f57MmAB9U-3236NaU3q4w"> </head>
+
+<body>
+	<div class="first-box custom-box">
+		<form method="POST" id="validation">
+			<p> See Mr. Skapetis for password</p>
+			<input type="password" name="code" required>
+			<button type="submit" class="btn" align="center" onclick="quizEnd()">Check Password</button>
+		</form>
+	</div>
+	<div class="home-box custom-box hide">
+		<h3>Instructions:<br></h3>
+		<p>Once all mandatory work has been completed and Mr. Skapetis has approved you to do so, you may complete this exit ticket.
+			<br>
+		</p>
+		<p>This is to be completed by yourself without the aide of notes, videos, or any other informational source.
+			<br>
+		</p>
+		<p>Total number of questions:<span class="total-question"> 5<br></span></p>
+		<form method="POST" name="google-sheet">
+			<input name="lastName" type="text" placeholder="Last Name" id="lastName" required>
+			<input name="firstName" type="text" placeholder="First Name" id="firstName" required>
+			<input name="Period" type="number" placeholder="Period" maxlength="1" id="period" required>
+			<select name="subject" id="subject" required>
+				<option value="AP Physics C: Mechanics">AP Physics C: Mechanics</option>
+				<option value="AP Physics C: Electricity and Magnetism">AP Physics C: Electricity and Magnetism</option>
+				<option value="AP Physics 1">AP Physics 1</option>
+				<option value="AP Physics 2">AP Physics 2</option>
+				<option value="Physics">Physics 1</option>
+				<option value="Astronomy">Astronomy</option>
+			</select>
+			<input type="number" name="lesson" placeholder="Enter lesson number EX: X.X" maxlength="4" id="lesson" required>
+			<button type="button" class="btn" align="center" onclick="reminder()" id="start">Begin Exit Ticket</button>
+		</form>
+	</div>
+	<div class="quiz-box custom-box hide">
+		<div class="question-number"> </div>
+		<div class="question-text"> </div>
+		<div class="option-container"> </div>
+		<div class="next-question-btn">
+			<button type="button" class="btn" onclick=n ext()>Next</button>
+		</div>
+		<div class="answers-indicator"> </div>
+	</div>
+	</div>
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
+		<!-- Password Modal -->
+		<div class="modal-content"> <span class="close">&times;</span>
+			<p>This is not the correct Password. Please get Mr. Skapetis</p>
+		</div>
+	</div>
+	<!-- Reminder Modal -->
+	<div id="remindModal" class="modal">
+		<div class="modal-content"> <span class="close" id="spanOne">&times;</span>
+			<p>Do not select an answer until you are sure that is your 'final answer'. Good luck!</p>
+		</div>
+	</div>
+	<div class="result-box custom-box hide">
+		<h1>Exit Ticket Result</h1>
+		<table>
+			<tr>
+				<td>Name</td>
+				<td><span class="full-name"> </span></td>
+			</tr>
+			<tr>
+				<td>Subject</td>
+				<td><span class="subject"> </span></td>
+			</tr>
+			<tr>
+				<td>Lesson</td>
+				<td><span class="lesson"> </span></td>
+			</tr>
+			<tr>
+				<td>Period</td>
+				<td><span class="period"> </span></td>
+			</tr>
+			<tr>
+				<td>Total Questions</td>
+				<td><span class="total-question"> </span></td>
+			</tr>
+			<tr>
+				<td>Attempted Questions</td>
+				<td><span class="total-attempt"> </span></td>
+			</tr>
+			<tr>
+				<td>Correct</td>
+				<td><span class="total-correct"> </span></td>
+			</tr>
+			<tr>
+				<td>Wrong</td>
+				<td><span class="total-wrong"></span></td>
+			</tr>
+			<tr>
+				<td>Percentage</td>
+				<td><span class="percentage"></span></td>
+			</tr>
+			<tr>
+				<td>Your Total Score</td>
+				<td><span class="total-score"></span></td>
+			</tr>
+			<tr>
+				<td>Topics to Study:</td>
+				<td><span class="topic-list"></span></td>
+			</tr>
+		</table>
+		<button type="button" class="btn" onclick="location.href = 'https://www.skaphysics.com'">Return to Skaphysics</button>
+	</div>
+	<script>
+	//question bank
+	const quiz = [{
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.]  What distance does the man travel in going from point A to point B?",
+		options: ['15 meters', '30 meters', '60 meters', '90 meters', '120 meters'],
+		answer: 4,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Distance vs. Displacement from a graph"
+	}, {
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.] What is the magnitude of the man's displacement once he reaches point B?",
+		options: ['15 meters', '30 meters', '60 meters', '90 meters', '120 meters'],
+		answer: 2,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Distance vs. Displacement from a graph"
+	}, {
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.] What is the man's average speed as he travels from point A to point B?",
+		options: ['2 m/s', '3 m/s', '6 m/s', '7 m/s', '18 m/s'],
+		answer: 2,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Average Speed vs Velocity"
+	}, {
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.] What is the magnitude of the man's average velocity for this travel?",
+		options: ['2 m/s', '3 m/s', '6 m/s', '7 m/s', '18 m/s'],
+		answer: 1,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Average Speed vs Velocity"
+	}, {
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.] What is the man's instantaneous speed at time t = 19 seconds?",
+		options: ['3 m/s', '5 m/s', '6 m/s', '8 m/s', '10 m/s'],
+		answer: 4,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Instantaneous Speed"
+	}, {
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.] What is the man's instantaneous speed at time t = 6 seconds?",
+		options: ['3 m/s', '5 m/s', '6 m/s', '8 m/s', '10 m/s'],
+		answer: 1,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Instantaneous Speed"
+	}, {
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.]  What distance does the man travel in going from point A to point B and back to point A again?",
+		options: ['100 meters', '22 meters', '11 meters', '280 meters', '240 meters'],
+		answer: 4,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Distance vs. Displacement from a graph"
+	}, {
+		q: "A man on a motorcycle is initially at point A.  At time t = 0, the man travels along the path shown to point B.  The amount of time required to complete each segment of the path is also indicated in the diagram.  [Note:  The squares in the grid are 10 meters long.]  What displacement does the man travel in going from point A to point B and back to point A again?",
+		options: ['100 meters', '22 meters', '0 meters', '280 meters', '240 meters'],
+		answer: 2,
+		imgURL: 'https://drive.google.com/uc?export=view&id=1OX4B-3GTzaMSCJpjVLO9HjENK3heUrPC',
+		topic: "Distance vs. Displacement from a graph"
+	}]
+	const questionNumber = document.querySelector(".question-number");
+	const questionText = document.querySelector(".question-text");
+	const optionContainer = document.querySelector(".option-container");
+	const homeBox = document.querySelector(".home-box");
+	const firstBox = document.querySelector(".first-box");
+	const quizBox = document.querySelector(".quiz-box");
+	const resultBox = document.querySelector(".result-box");
+	const SPREADSHEET_ID = '1QyB3WT1LrfJDNjiaVvLQYkGlu_GB8fT3yXDdjXGsoFc';
+	const CLIENT_ID = '15494048086-sg57jbj9cjdlmuiekvt7sd1cdh2p6qb3.apps.googleusercontent.com';
+	const SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+	const API_KEY = 'AIzaSyCgv5WIgpm4DaWQFgSuVd2wAcLxRparQ50';
+	var modal = document.getElementById("myModal");
+	var btn = document.getElementById("validation");
+	var span = document.getElementsByClassName("close")[0];
+	var spanOne = document.getElementsByClassName("close")[1];
+	var modalOne = document.getElementById("remindModal");
+	var btn1 = document.getElementById("start");
+	let questionCounter = 0;
+	let currentQuestion;
+	let availableQuestions = [];
+	let availableOptions = [];
+	let correctAnswers = 0;
+	let attempt = 0;
+	let topicList = [];
+	/*//push the questions into availableQuestions Array
+	function setAvailableQuestions(){
+		const totalQuestion = quiz.length;
+		for(let i=0; i<totalQuestion;
+			i++){
+			availableQuestions.push(quiz[i])
+		}
+	}*/
+	//push the questions into availableQuestions Array
+	function setAvailableQuestions() {
+		const length = 5
+		const quizlength = quiz.length
+		while(length > quizlength) {
+			length = quizlength
+		}
+		for(let i = 0; i < length; i++) {
+			r = Math.floor(Math.random() * quizlength)
+			availableQuestions.push(quiz[r])
+			quiz.splice(r, 0)
+		}
+	}
+
+	function quizEnd() {
+		var fileNotFound = document.querySelector("input");
+		document.getElementById("validation").addEventListener('submit', validate)
+
+		function validate(e) {
+			e.preventDefault();
+			let valid = true;
+			if(fileNotFound.value === "notFound") {
+				enterInfo();
+			} else {
+				modal.style.display = "block";
+				// When the user clicks on <span> (x), close the modal
+				span.onclick = function() {
+						modal.style.display = "none";
+					}
+					// When the user clicks anywhere outside of the modal, close it
+				window.onclick = function(event) {
+					if(event.target == modal) {
+						modal.style.display = "none";
+					}
+				}
+			}
+		}
+	}
+
+	function enterInfo() {
+		homeBox.classList.remove("hide");
+		firstBox.classList.add("hide");
+	}
+
+	function reminder() {
+		modalOne.style.display = "block";
+		// When the user clicks on <span> (x), close the modal
+		spanOne.onclick = function() {
+			modalOne.style.display = "none"; {
+				startQuiz();
+			}
+		}
+	}
+
+	function startQuiz() {
+		//hide the homeBox
+		homeBox.classList.add("hide");
+		//show resultBox
+		quizBox.classList.remove("hide");
+	}
+	//set question number, question, and options
+	function getNewQuestion() {
+		questionCounter++;
+		//set question number
+		currentQuestion = availableQuestions[questionCounter - 1]
+		questionNumber.innerHTML = "Question " + questionCounter + " of " + availableQuestions.length;
+		//set question text
+		questionText.innerHTML = currentQuestion.q;
+		//add image to question
+		var img = new Image();
+		img.src = currentQuestion.imgURL
+		document.querySelector('.question-text').appendChild(img);
+		//set options
+		// get the length of options
+		const optionLen = currentQuestion.options.length
+			//push options into availableOptions Array
+		for(let i = 0; i < optionLen; i++) {
+			availableOptions.push(i)
+		}
+		optionContainer.innerHTML = '';
+		let animationDelay = 0.2;
+		//create options in html
+		for(let i = 0; i < optionLen; i++) {
+			// random option
+			const optonIndex = availableOptions[Math.floor(Math.random() * availableOptions.length)];
+			// remove the 'optionIndex' from availableOptions so there is not a repeat option
+			const index2 = availableOptions.indexOf(optonIndex);
+			//remove the 'optonIndex' from the availableOptions so there are no repeat options
+			availableOptions.splice(index2, 1);
+			const option = document.createElement("div");
+			option.innerHTML = currentQuestion.options[optonIndex];
+			option.id = optonIndex;
+			option.style.animationDelay = animationDelay + 's';
+			animationDelay = animationDelay + 0.2;
+			option.className = "option";
+			optionContainer.appendChild(option)
+			option.setAttribute("onclick", "getResult(this)");
+		}
+	}
+	//get the result of the current attempt question
+	function getResult(element) {
+		const id = parseInt(element.id);
+		//get the answer by comparing the id of clicked option
+		if(id === currentQuestion.answer) {
+			//set the color to the correct option (green?)
+			element.classList.add("correct");
+			correctAnswers++;
+		} else {
+			//set the color to the wrong option (red?)
+			element.classList.add("wrong");
+			topicList.push(currentQuestion.topic);
+		}
+		attempt++;
+		unclickableOptions();
+	}
+	// make all the options unclickable after a choice has been selected
+	function unclickableOptions() {
+		const optionLen = optionContainer.children.length;
+		for(let i = 0; i < optionLen; i++) {
+			optionContainer.children[i].classList.add("already-answered");
+		}
+	}
+
+	function next() {
+		if(questionCounter === availableQuestions.length) {
+			console.log("Exit Ticket Completed")
+				//alert('Submit and view results?')
+			quizOver();
+		} else {
+			/*img.onload = () => {
+    URL.revokeObjectURL(img.src);
+  	*/
+			getNewQuestion();
+		}
+	}
+
+	function quizOver() {
+		//hide the quiz box
+		quizBox.classList.add("hide");
+		//show resultBox
+		resultBox.classList.remove("hide");
+		quizResult();
+	}
+	//get the results
+	function quizResult() {
+		var firstName = document.getElementById("firstName").value;
+		var lastName = document.getElementById("lastName").value;
+		var fullName = firstName + " " + lastName;
+		var period = document.getElementById("period").value;
+		var subject = document.getElementById("subject").value;
+		var lesson = document.getElementById("lesson").value;
+		var percentage = (correctAnswers / availableQuestions.length) * 100;
+		resultBox.querySelector(".full-name").innerHTML = fullName;
+		resultBox.querySelector(".subject").innerHTML = subject;
+		resultBox.querySelector(".period").innerHTML = period;
+		resultBox.querySelector(".lesson").innerHTML = lesson;
+		resultBox.querySelector(".total-question").innerHTML = availableQuestions.length;
+		resultBox.querySelector(".total-attempt").innerHTML = attempt;
+		resultBox.querySelector(".total-correct").innerHTML = correctAnswers;
+		resultBox.querySelector(".total-wrong").innerHTML = attempt - correctAnswers;
+		resultBox.querySelector(".percentage").innerHTML = percentage.toFixed() + "%";
+		resultBox.querySelector(".total-score").innerHTML = correctAnswers + "/" + availableQuestions.length;
+		resultBox.querySelector(".topic-list").innerHTML = topicList;
+	}
+	/*//post results to Google Sheet
+	function getResults(){
+		const scriptURL = "https://script.google.com/macros/s/AKfycbwa5S06ds7-alPvPjSsQjLQj_6vlcOJqshmkiESar2hp6e--tT0PdcYAxPHRWoxR7g0/exec"
+		var percentage = (correctAnswers / availableQuestions.length) * 100;
+		var form = document.forms['google-sheet']
+		var fetchBody = new FormData(form);
+		fetchBody.append('percentage',percentage);
+		for (var i = 0; i <topicList.length; i++) {
+	  		fetchBody.append('topicList[]', topicList[i]);
+			}
+		postResults();
+
+		function postResults(){;
+		fetch(scriptURL, { method: 'POST', body: fetchBody});
+		}
+		}
+	*/
+	window.onload = function() {
+			quizBox.classList.add("hide");
+			// first set all questions available in availableQuestions Array
+			setAvailableQuestions();
+			// Next, get a new question
+			getNewQuestion();
+		}
+		//DS
+	</script>
+</body>
+
+</html>
