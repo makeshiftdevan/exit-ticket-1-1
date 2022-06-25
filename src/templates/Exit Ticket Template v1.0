@@ -216,7 +216,7 @@
 		function validate(e) {
 			e.preventDefault();
 			let valid = true;
-			if(fileNotFound.value === "notFound") {
+			if(fileNotFound.value === "passwordPlaceholder") {
 				enterInfo();
 			} else {
 				modal.style.display = "block";
